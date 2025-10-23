@@ -1,33 +1,116 @@
+/* Google Font */
+@import url("https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600&display=swap");
+
+/* Global Styles */
 body {
-  font-family: system-ui, sans-serif;
+  font-family: "Space Grotesk", sans-serif;
   max-width: 900px;
-  margin: 40px auto;
-  padding: 0 20px;
-  background: #f9f9f9;
-  color: #222;
+  margin: 0 auto;
+  padding: 40px 20px;
+  background: linear-gradient(135deg, #0a0f14, #081b27);
+  color: #e6f1ff;
+  box-sizing: border-box;
 }
 
+/* Header */
 header {
   text-align: center;
-  margin-bottom: 3rem;
+  margin-bottom: 60px;
+  padding-bottom: 20px;
+  border-bottom: 1px solid rgba(0, 200, 255, 0.3);
 }
 
 h1 {
-  font-size: 2.5rem;
-  color: #0b7285;
+  font-size: 46px;
+  font-weight: 600;
+  color: #00e5ff;
+  margin: 0 0 10px 0;
 }
 
+header p {
+  font-size: 18px;
+  color: #9ac3d6;
+  margin: 5px 0;
+}
+
+/* Headings */
 h2 {
-  color: #1864ab;
-  border-bottom: 2px solid #ccc;
-  padding-bottom: 0.3rem;
+  color: #00d1ff;
+  font-size: 26px;
+  margin-bottom: 10px;
+  padding-bottom: 5px;
+  border-bottom: 1px solid rgba(0, 200, 255, 0.25);
 }
 
+/* Links */
 a {
-  color: #0b7285;
+  color: #00d1ff;
   text-decoration: none;
+  transition: 0.3s;
 }
 
 a:hover {
-  text-decoration: underline;
+  color: #74f0ff;
+  text-shadow: 0 0 8px #00e5ff;
+}
+
+/* Sections */
+section {
+  margin-bottom: 50px;
+}
+
+/* Portfolio Grid */
+#portfolio ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 18px;
+}
+
+#portfolio li {
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(0, 200, 255, 0.15);
+  padding: 18px;
+  flex: 1 1 calc(50% - 18px);
+  border-radius: 8px;
+  transition: 0.35s;
+}
+
+#portfolio li:hover {
+  transform: translateY(-4px);
+  border-color: rgba(0, 240, 255, 0.6);
+  box-shadow: 0 0 12px rgba(0, 230, 255, 0.4);
+}
+
+/* Footer */
+footer {
+  text-align: center;
+  font-size: 15px;
+  margin-top: 40px;
+  padding-top: 20px;
+  border-top: 1px solid rgba(0, 200, 255, 0.25);
+}
+
+/* Responsive Design */
+@media (max-width: 600px) {
+  h1 {
+    font-size: 34px;
+  }
+  header p {
+    font-size: 16px;
+  }
+  #portfolio li {
+    flex: 1 1 100%;
+  }
+}
+
+@media (max-width: 400px) {
+  body {
+    padding: 20px 12px;
+  }
+  h1 {
+    font-size: 28px;
+  }
 }
