@@ -36,24 +36,39 @@ const projects = [
   {
     title: "Wildradar",
     description:
-      "Projektarbeit im Rahmen des Bachelorstudiums. Präsentation mit Bestnote (6). Entwicklung einer Lösung zur Erfassung und Analyse von Wildtierdaten.",
+      "Projektarbeit im Rahmen des Bachelorstudiums. Präsentation mit Bestnote (6). Entwicklung einer Lösung zur Prävention von Wildunfällen im öffentlichen Strassenverkehr.",
     icon: "🦌",
-    tags: ["Bachelor Projekt", "Datenanalyse", "Konzept", "Teamarbeit"],
+    tags: ["WPR2", "Datenanalyse", "Business Case Study", "Teamarbeit"],
     demo: "https://showroom-bcs.digisus-lab.ch/ghost/#/site",
   },
   {
-    title: "Typescript App mit SAP S/4HANA Anbindung",
+    title: "TypeScript App mit SAP S/4HANA Anbindung",
     description:
-      "Offline-fähige Zeit- und Leistungserfassung für das FUB/VBS. Entwicklung einer modernen TS-App mit Synchronisation zum SAP S/4HANA Backend.",
+      "Offline-fähige Zeit- und Leistungserfassung für das FUB/VBS. Entwicklung einer modernen TypeScript-App mit Synchronisation zum SAP S/4HANA Backend.",
     icon: "⌚",
-    tags: ["TypeScript", "SAP S/4HANA", "Offline Sync", "REST API"],
+    tags: [
+      "TypeScript",
+      "SAP S/4HANA",
+      "Offline Sync",
+      "REST API",
+      "ABAP",
+      "Schnittstellen",
+    ],
   },
   {
     title: "SAP ERP Einführungen & Kundenentwicklungen",
     description:
-      "Diverse Kundenprojekte als SAP Development Consultant bei NTT DATA Business Solutions AG. Schwerpunkt in ABAP, Fiori & Schnittstellenentwicklung.",
+      "Diverse Kundenprojekte als SAP Development Consultant bei NTT DATA Business Solutions AG. Schwerpunkt in ABAP, Fiori, Formular- & Schnittstellenentwicklung.",
     icon: "🔧",
-    tags: ["SAP ABAP", "SAP Fiori", "ERP Implementierung"],
+    tags: [
+      "SAP ABAP",
+      "SAP Fiori",
+      "ERP Implementierung",
+      "Formularentwicklung",
+      "SAP Script",
+      "SAP Adobe Forms",
+      "Schnittstellenentwicklung",
+    ],
   },
 ];
 
