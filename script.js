@@ -37,7 +37,7 @@ const projects = [
     title: "Wildradar",
     description:
       "Projektarbeit im Rahmen des Bachelorstudiums. Präsentation mit Bestnote (6). Entwicklung einer Lösung zur Prävention von Wildunfällen im öffentlichen Strassenverkehr.",
-    icon: "/Images/Wildradar.png",
+    icon: (src = "/Images/Wildradar.png"),
     tags: ["WPR2", "Datenanalyse", "Business Case Study", "Teamarbeit"],
     demo: "https://showroom-bcs.digisus-lab.ch/ghost/#/site",
   },
@@ -45,7 +45,7 @@ const projects = [
     title: "TypeScript App mit SAP S/4HANA Anbindung",
     description:
       "Offline-fähige Zeit- und Leistungserfassung für das FUB/VBS. Entwicklung einer modernen TypeScript-App mit Synchronisation zum SAP S/4HANA Backend.",
-    icon: "/Images/Typescript.png",
+    icon: (src = "/Images/Typescript.png"),
     tags: [
       "TypeScript",
       "SAP S/4HANA",
@@ -59,7 +59,7 @@ const projects = [
     title: "SAP ERP Einführungen & Kundenentwicklungen",
     description:
       "Diverse Kundenprojekte als SAP Development Consultant bei NTT DATA Business Solutions AG. Schwerpunkt in ABAP, Fiori, Formular- & Schnittstellenentwicklung.",
-    icon: "/Images/Sap4Hana.png",
+    icon: (src = "/Images/Sap4Hana.png"),
     tags: [
       "SAP ABAP",
       "SAP Fiori",
