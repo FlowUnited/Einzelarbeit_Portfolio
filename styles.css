@@ -189,7 +189,99 @@ body {
   flex-wrap: wrap;
   animation: fadeInUp 0.8s ease 0.4s backwards;
 }
+/* === CARD FLIP === */
+.card {
+  width: 100%;
+  max-width: 1024px; /* maximale Breite */
+  perspective: 1500px;
+  cursor: pointer;
+  margin: 20px auto;
+}
 
+.card-inner {
+  position: relative;
+  width: 100%;
+  padding-top: 56.25%; /* Seitenverhältnis 16:9 */
+  transition: transform 0.8s;
+  transform-style: preserve-3d;
+  border-radius: 16px;
+  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+}
+
+.card.flipped .card-inner {
+  transform: rotateY(180deg);
+}
+
+/* Vorderseite */
+.card-front,
+.card-back {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  backface-visibility: hidden;
+  border-radius: 16px;
+  overflow: hidden;
+}
+
+.card-front img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover; /* Bild skaliert schön */
+}
+
+/* Rückseite als Visitenkarte */
+.card-back {
+  transform: rotateY(180deg);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background: linear-gradient(
+    135deg,
+    rgba(10, 14, 15, 0.95),
+    /* dunkles Schwarzgrün */ rgba(0, 168, 84, 0.85) /* abgedunkeltes Grün */
+  );
+  color: var(--text-primary);
+  font-family: inherit;
+  text-align: center;
+  padding: 20px;
+  border-radius: 16px;
+  box-shadow: var(--shadow-lg);
+  transition: var(--transition);
+}
+
+.vc-container h2 {
+  margin: 0;
+  font-size: 2em;
+  font-weight: bold;
+  color: var(--primary-green);
+  text-shadow: 0 0 8px rgba(0, 255, 135, 0.7); /* leuchtender Text */
+}
+
+.vc-container .role {
+  font-style: italic;
+  font-size: 1.2em;
+  color: var(--text-secondary);
+  text-shadow: 0 0 6px rgba(0, 255, 135, 0.4);
+}
+
+.vc-container p {
+  margin: 2px 0;
+  font-size: 1em;
+  color: var(--text-primary);
+  text-shadow: 0 0 4px rgba(0, 0, 0, 0.5); /* leichter Schatten für Lesbarkeit */
+}
+
+.vc-container p.email,
+.vc-container p.phone,
+.vc-container p.website {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 0.95em;
+  color: var(--text-secondary);
+}
 /* === BUTTONS === */
 .btn {
   padding: 0.75rem 2rem;
