@@ -201,11 +201,13 @@ body {
 .card-inner {
   position: relative;
   width: 100%;
-  padding-top: 56.25%; /* Seitenverhältnis 16:9 */
+  padding-top: 56.25%;
   transition: transform 0.8s;
   transform-style: preserve-3d;
   border-radius: 16px;
   box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+  /* Chrome Hack: */
+  transform: translateZ(0);
 }
 
 .card.flipped .card-inner {
@@ -223,6 +225,8 @@ body {
   backface-visibility: hidden;
   border-radius: 16px;
   overflow: hidden;
+  -webkit-backface-visibility: hidden; /* für Chrome/Safari */
+  -webkit-transform: translateZ(0); /* Chrome Rendering Fix */
 }
 
 .card-front img {
