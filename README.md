@@ -1,2 +1,14 @@
+Diese Webseite wurde im Rahmen des Moduls EWEB im Herbsemester 2025 an der Berner Fachhochschule erstellt. 
+Autor: Florian Beutler (Florian.Beutler@students.bfh.ch)
+
+Die initiale Idee entstand durch den Projektauftrag aus dem Modul EWEB.
+Das Grungerüst und die Anbindung an GIT inklusive konfiguration öffentliche URL erfolgte initial durch Florian Beutler. 
+
+Der Design entwurf entstand durch gezieltes Prompting mit der Unterstützung durch "Claude.ai" und "Chatgpt.com". 
+Beide Versionen wurden in der öffentlichen kostenlos zugänglichen Version verwendet. 
+
+Jedes generierte Codestück wurde selbständig im Sourcecode eingetippt und kommentiert. 
+Grund dafür ist der Lerneffekt und die Gewissheit, generierten Inhalt auf Korrektheit und Inhalt zu prüfen. 
+
 Link für den Aufruf der Webseite:
 https://flowunited.github.io/Einzelarbeit_Portfolio/
