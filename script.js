@@ -34,28 +34,26 @@ document.querySelectorAll('a[href^="#"]').forEach((anchor) => {
 // === PROJECTS DATA ===
 const projects = [
   {
-    title: "Portfolio Website",
-    description: "Responsive Portfolio-Seite mit modernem Grün-Schwarz Design",
-    icon: "💼",
-    tags: ["HTML", "CSS", "JavaScript"],
-    github: "https://github.com/deinusername/portfolio",
-    demo: "#",
+    title: "Wildradar",
+    description:
+      "Projektarbeit im Rahmen des Bachelorstudiums. Präsentation mit Bestnote (6). Entwicklung einer Lösung zur Erfassung und Analyse von Wildtierdaten.",
+    icon: "🦌",
+    tags: ["Bachelor Projekt", "Datenanalyse", "Konzept", "Teamarbeit"],
+    demo: "https://showroom-bcs.digisus-lab.ch/ghost/#/site",
   },
   {
-    title: "Todo App",
-    description: "Interaktive Todo-Liste mit LocalStorage Integration",
-    icon: "✅",
-    tags: ["JavaScript", "CSS", "API"],
-    github: "#",
-    demo: "#",
+    title: "Typescript App mit SAP S/4HANA Anbindung",
+    description:
+      "Offline-fähige Zeit- und Leistungserfassung für das FUB/VBS. Entwicklung einer modernen TS-App mit Synchronisation zum SAP S/4HANA Backend.",
+    icon: "⌚",
+    tags: ["TypeScript", "SAP S/4HANA", "Offline Sync", "REST API"],
   },
   {
-    title: "Weather Dashboard",
-    description: "Wetter-App mit API-Integration und Charts",
-    icon: "🌤️",
-    tags: ["JavaScript", "API", "Chart.js"],
-    github: "#",
-    demo: "#",
+    title: "SAP ERP Einführungen & Kundenentwicklungen",
+    description:
+      "Diverse Kundenprojekte als SAP Development Consultant bei NTT DATA Business Solutions AG. Schwerpunkt in ABAP, Fiori & Schnittstellenentwicklung.",
+    icon: "🔧",
+    tags: ["SAP ABAP", "SAP Fiori", "ERP Implementierung"],
   },
 ];
 
@@ -77,39 +75,11 @@ function renderProjects() {
                       .join("")}
                 </div>
                 <div class="project-links">
-                    <a href="${
-                      project.github
-                    }" class="btn btn-secondary" target="_blank">GitHub</a>
-                    <a href="${project.demo}" class="btn btn-primary">Demo</a>
+                    <a href="${project.github}"
                 </div>
             </div>
         `;
     container.appendChild(card);
-  });
-}
-
-// === STATS ANIMATION ===
-function animateStats() {
-  const stats = [
-    { id: "projectCount", target: projects.length },
-    { id: "techCount", target: 8 },
-    { id: "commitCount", target: 42 },
-  ];
-
-  stats.forEach((stat) => {
-    const element = document.getElementById(stat.id);
-    let current = 0;
-    const increment = stat.target / 50;
-
-    const timer = setInterval(() => {
-      current += increment;
-      if (current >= stat.target) {
-        element.textContent = stat.target;
-        clearInterval(timer);
-      } else {
-        element.textContent = Math.floor(current);
-      }
-    }, 30);
   });
 }
 
@@ -167,22 +137,6 @@ function createSkillsChart() {
     },
   });
 }
-
-// === FORM HANDLING ===
-document.getElementById("contactForm").addEventListener("submit", function (e) {
-  e.preventDefault();
-
-  const name = document.getElementById("name").value;
-  const email = document.getElementById("email").value;
-  const message = document.getElementById("message").value;
-
-  // Hier würdest du normalerweise die Daten an einen Server senden
-  // oder per EmailJS o.ä. versenden
-  alert(
-    `Danke ${name}! Deine Nachricht wurde empfangen.\n\nEmail: ${email}\nNachricht: ${message}`
-  );
-  this.reset();
-});
 
 // === INTERSECTION OBSERVER für Animationen ===
 const observer = new IntersectionObserver(
