@@ -37,7 +37,7 @@ const projects = [
     title: "Wildradar",
     description:
       "Projektarbeit im Rahmen des Bachelorstudiums. Präsentation mit Bestnote (6). Entwicklung einer Lösung zur Prävention von Wildunfällen im öffentlichen Strassenverkehr.",
-    icon: (src = "/Images/Wildradar.png"),
+    icon: "Images/Wildradar.png",
     tags: ["WPR2", "Datenanalyse", "Business Case Study", "Teamarbeit"],
     demo: "https://showroom-bcs.digisus-lab.ch/ghost/#/site",
   },
@@ -45,7 +45,7 @@ const projects = [
     title: "TypeScript App mit SAP S/4HANA Anbindung",
     description:
       "Offline-fähige Zeit- und Leistungserfassung für das FUB/VBS. Entwicklung einer modernen TypeScript-App mit Synchronisation zum SAP S/4HANA Backend.",
-    icon: (src = "/Images/Typescript.png"),
+    icon: "Images/Typescript.png",
     tags: [
       "TypeScript",
       "SAP S/4HANA",
@@ -59,7 +59,7 @@ const projects = [
     title: "SAP ERP Einführungen & Kundenentwicklungen",
     description:
       "Diverse Kundenprojekte als SAP Development Consultant bei NTT DATA Business Solutions AG. Schwerpunkt in ABAP, Fiori, Formular- & Schnittstellenentwicklung.",
-    icon: (src = "/Images/Sap4Hana.png"),
+    icon: "Images/Sap4Hana.png",
     tags: [
       "SAP ABAP",
       "SAP Fiori",
@@ -80,24 +80,29 @@ function renderProjects() {
     const card = document.createElement("div");
     card.className = "project-card";
     card.innerHTML = `
-            <div class="project-image">${project.icon}</div>
-            <div class="project-content">
-                <h3 class="project-title">${project.title}</h3>
-                <p class="project-description">${project.description}</p>
-                <div class="project-tags">
-                    ${project.tags
-                      .map((tag) => `<span class="tag">${tag}</span>`)
-                      .join("")}
-                </div>
-                <div class="project-links">
-                    <a href="${project.github}"
-                </div>
-            </div>
-        `;
+      <div class="project-image">
+        <img src="${project.icon}" alt="${project.title}" class="project-img">
+      </div>
+      <div class="project-content">
+        <h3 class="project-title">${project.title}</h3>
+        <p class="project-description">${project.description}</p>
+        <div class="project-tags">
+          ${project.tags
+            .map((tag) => `<span class="tag">${tag}</span>`)
+            .join("")}
+        </div>
+        <div class="project-links">
+          ${
+            project.demo
+              ? `<a href="${project.demo}" class="btn btn-secondary" target="_blank">Demo ansehen</a>`
+              : ""
+          }
+        </div>
+      </div>
+    `;
     container.appendChild(card);
   });
 }
-
 // === CHART.JS VISUALIZATION ===
 function createSkillsChart() {
   const ctx = document.getElementById("skillsChart");
