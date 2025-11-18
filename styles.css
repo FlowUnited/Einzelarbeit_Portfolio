@@ -1,5 +1,6 @@
 /* ================================================
    PORTFOLIO STYLESHEET - GRÜN-SCHWARZ THEME
+   RESPONSIVE OPTIMIERT
    ================================================ */
 
 /* === CSS VARIABLES === */
@@ -152,13 +153,15 @@ body {
 
 .hero-content {
   max-width: 1200px;
+  width: 100%;
   text-align: center;
   position: relative;
   z-index: 1;
+  padding: 0 1rem;
 }
 
 .hero-title {
-  font-size: 3.5rem;
+  font-size: clamp(2rem, 5vw, 3.5rem);
   margin-bottom: 1rem;
   color: var(--text-primary);
   animation: fadeInUp 0.8s ease;
@@ -176,7 +179,7 @@ body {
 }
 
 .hero-subtitle {
-  font-size: 1.5rem;
+  font-size: clamp(1rem, 3vw, 1.5rem);
   color: var(--text-secondary);
   margin-bottom: 2rem;
   animation: fadeInUp 0.8s ease 0.2s backwards;
@@ -189,10 +192,11 @@ body {
   flex-wrap: wrap;
   animation: fadeInUp 0.8s ease 0.4s backwards;
 }
+
 /* === CARD FLIP === */
 .card {
   width: 100%;
-  max-width: 1024px; /* maximale Breite */
+  max-width: 800px;
   perspective: 1500px;
   cursor: pointer;
   margin: 20px auto;
@@ -201,12 +205,11 @@ body {
 .card-inner {
   position: relative;
   width: 100%;
-  padding-top: 56.25%;
+  padding-top: 56.25%; /* 16:9 Aspect Ratio */
   transition: transform 0.8s;
   transform-style: preserve-3d;
   border-radius: 16px;
   box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
-  /* Chrome Hack: */
   transform: translateZ(0);
 }
 
@@ -214,7 +217,7 @@ body {
   transform: rotateY(180deg);
 }
 
-/* Vorderseite */
+/* Vorderseite & Rückseite */
 .card-front,
 .card-back {
   position: absolute;
@@ -223,20 +226,20 @@ body {
   width: 100%;
   height: 100%;
   -webkit-backface-visibility: hidden;
+  backface-visibility: hidden;
   border-radius: 16px;
   overflow: hidden;
-  backface-visibility: hidden; /* für Chrome/Safari */
-  -webkit-transform: translateZ(0); /* Chrome Rendering Fix */
+  -webkit-transform: translateZ(0);
   transform: translateZ(0);
 }
 
 .card-front img {
   width: 100%;
   height: 100%;
-  object-fit: cover; /* Bild skaliert schön */
+  object-fit: cover;
 }
 
-/* Rückseite als Visitenkarte */
+/* Rückseite - Visitenkarte */
 .card-back {
   transform: rotateY(180deg);
   display: flex;
@@ -245,37 +248,43 @@ body {
   background: linear-gradient(
     135deg,
     rgba(10, 14, 15, 0.95),
-    /* dunkles Schwarzgrün */ rgba(0, 168, 84, 0.85) /* abgedunkeltes Grün */
+    rgba(0, 168, 84, 0.85)
   );
   color: var(--text-primary);
-  font-family: inherit;
   text-align: center;
-  padding: 20px;
-  border-radius: 16px;
-  box-shadow: var(--shadow-lg);
-  transition: var(--transition);
+  padding: clamp(1rem, 3vw, 2rem);
+}
+
+.vc-container {
+  width: 100%;
+  max-width: 600px;
+  padding: 0 1rem;
 }
 
 .vc-container h2 {
-  margin: 0;
-  font-size: 2em;
+  margin: 0 0 clamp(0.5rem, 2vw, 1rem) 0;
+  font-size: clamp(1.5rem, 4vw, 2.5rem);
   font-weight: bold;
   color: var(--primary-green);
-  text-shadow: 0 0 8px rgba(0, 255, 135, 0.7); /* leuchtender Text */
+  text-shadow: 0 0 8px rgba(0, 255, 135, 0.7);
+  word-wrap: break-word;
 }
 
 .vc-container .role {
   font-style: italic;
-  font-size: 1.2em;
+  font-size: clamp(1rem, 2.5vw, 1.3rem);
   color: var(--text-secondary);
   text-shadow: 0 0 6px rgba(0, 255, 135, 0.4);
+  margin-bottom: clamp(0.5rem, 2vw, 1rem);
 }
 
 .vc-container p {
-  margin: 2px 0;
-  font-size: 1em;
+  margin: clamp(0.3rem, 1vw, 0.5rem) 0;
+  font-size: clamp(0.85rem, 2vw, 1.1rem);
   color: var(--text-primary);
-  text-shadow: 0 0 4px rgba(0, 0, 0, 0.5); /* leichter Schatten für Lesbarkeit */
+  text-shadow: 0 0 4px rgba(0, 0, 0, 0.5);
+  word-wrap: break-word;
+  overflow-wrap: break-word;
 }
 
 .vc-container p.email,
@@ -283,13 +292,16 @@ body {
 .vc-container p.website {
   display: flex;
   align-items: center;
+  justify-content: center;
   gap: 6px;
-  font-size: 0.95em;
+  font-size: clamp(0.8rem, 1.8vw, 1rem);
   color: var(--text-secondary);
+  flex-wrap: wrap;
 }
+
 /* === BUTTONS === */
 .btn {
-  padding: 0.75rem 2rem;
+  padding: clamp(0.6rem, 2vw, 0.75rem) clamp(1.5rem, 3vw, 2rem);
   border-radius: 0.5rem;
   text-decoration: none;
   font-weight: 600;
@@ -297,6 +309,7 @@ body {
   display: inline-block;
   border: none;
   cursor: pointer;
+  font-size: clamp(0.9rem, 2vw, 1rem);
 }
 
 .btn-primary {
@@ -324,7 +337,7 @@ body {
 
 /* === SECTIONS === */
 .section {
-  padding: 5rem 2rem;
+  padding: clamp(3rem, 8vw, 5rem) 2rem;
   max-width: 1200px;
   margin: 0 auto;
 }
@@ -334,7 +347,7 @@ body {
 }
 
 .section-title {
-  font-size: 2.5rem;
+  font-size: clamp(2rem, 5vw, 2.5rem);
   margin-bottom: 1rem;
   text-align: center;
   color: var(--text-primary);
@@ -358,7 +371,7 @@ body {
   text-align: center;
   color: var(--text-muted);
   margin-bottom: 3rem;
-  font-size: 1.1rem;
+  font-size: clamp(1rem, 2vw, 1.1rem);
 }
 
 /* === ABOUT SECTION === */
@@ -378,11 +391,12 @@ body {
   margin-bottom: 1rem;
   color: var(--text-secondary);
   text-align: justify;
+  font-size: clamp(0.95rem, 2vw, 1rem);
 }
 
 .skills-container {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
   gap: 1.5rem;
   margin-top: 2rem;
 }
@@ -393,7 +407,7 @@ body {
     var(--medium-gray) 0%,
     var(--dark-gray) 100%
   );
-  padding: 2rem 1.5rem;
+  padding: clamp(1.5rem, 3vw, 2rem) clamp(1rem, 2vw, 1.5rem);
   border-radius: 0.75rem;
   text-align: center;
   transition: var(--transition);
@@ -434,7 +448,7 @@ body {
 }
 
 .skill-icon {
-  font-size: 2.5rem;
+  font-size: clamp(2rem, 4vw, 2.5rem);
   margin-bottom: 1rem;
   filter: grayscale(0.3);
   transition: var(--transition);
@@ -447,7 +461,7 @@ body {
 
 .skill-item h3 {
   color: var(--text-primary);
-  font-size: 1.1rem;
+  font-size: clamp(0.95rem, 2vw, 1.1rem);
   font-weight: 600;
   transition: var(--transition);
 }
@@ -460,7 +474,7 @@ body {
 /* === PROJECTS SECTION === */
 .projects-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
   gap: 2rem;
 }
 
@@ -487,7 +501,9 @@ body {
   align-items: center;
   justify-content: center;
   font-size: 3rem;
+  overflow: hidden;
 }
+
 .project-img {
   width: 100%;
   height: 100%;
@@ -499,7 +515,7 @@ body {
 }
 
 .project-title {
-  font-size: 1.25rem;
+  font-size: clamp(1.1rem, 2vw, 1.25rem);
   margin-bottom: 0.5rem;
   color: var(--primary-green);
 }
@@ -507,6 +523,8 @@ body {
 .project-description {
   color: var(--text-secondary);
   margin-bottom: 1rem;
+  font-size: clamp(0.9rem, 1.8vw, 1rem);
+  line-height: 1.5;
 }
 
 .project-tags {
@@ -520,7 +538,7 @@ body {
   background-color: var(--light-gray);
   padding: 0.25rem 0.75rem;
   border-radius: 1rem;
-  font-size: 0.875rem;
+  font-size: clamp(0.75rem, 1.5vw, 0.875rem);
   color: var(--primary-green);
   border: 1px solid var(--primary-green);
 }
@@ -528,6 +546,7 @@ body {
 .project-links {
   display: flex;
   gap: 1rem;
+  flex-wrap: wrap;
 }
 
 /* === FOOTER === */
@@ -549,11 +568,12 @@ body {
   gap: 1.5rem;
   justify-content: center;
   margin-bottom: 1rem;
+  flex-wrap: wrap;
 }
 
 .social-link {
   color: var(--text-secondary);
-  font-size: 1.5rem;
+  font-size: clamp(1.2rem, 2vw, 1.5rem);
   transition: var(--transition);
   text-decoration: none;
 }
@@ -562,6 +582,10 @@ body {
   color: var(--primary-green);
   transform: translateY(-3px);
   text-shadow: var(--glow);
+}
+
+.footer-content p {
+  font-size: clamp(0.85rem, 1.5vw, 1rem);
 }
 
 /* === ANIMATIONS === */
@@ -576,26 +600,20 @@ body {
   }
 }
 
-/* === RESPONSIVE === */
-@media (max-width: 968px) {
+/* === RESPONSIVE BREAKPOINTS === */
+
+/* Tablets im Landscape */
+@media (max-width: 1024px) {
   .skills-container {
-    grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
-    gap: 1.2rem;
+    grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
   }
 
-  .skill-item {
-    padding: 1.5rem 1rem;
-  }
-
-  .skill-icon {
-    font-size: 2rem;
-  }
-
-  .skill-item h3 {
-    font-size: 1rem;
+  .card {
+    max-width: 700px;
   }
 }
 
+/* Tablets im Portrait */
 @media (max-width: 768px) {
   .nav-menu {
     position: fixed;
@@ -619,42 +637,87 @@ body {
     display: block;
   }
 
-  .hero-title {
-    font-size: 2rem;
-  }
-
-  .hero-subtitle {
-    font-size: 1.2rem;
-  }
-
   .about-content {
     grid-template-columns: 1fr;
   }
 
-  .section-title {
-    font-size: 2rem;
+  .card {
+    max-width: 600px;
   }
 
-  .section {
-    padding: 3rem 1rem;
+  .vc-container h2 {
+    font-size: 1.8rem;
   }
 
   .skills-container {
-    grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
-    gap: 1rem;
-  }
-}
-
-@media (max-width: 480px) {
-  .hero-title {
-    font-size: 1.75rem;
+    grid-template-columns: repeat(auto-fit, minmax(130px, 1fr));
+    gap: 1.2rem;
   }
 
   .projects-grid {
-    grid-template-columns: 1fr;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  }
+}
+
+/* Mobile Geräte */
+@media (max-width: 480px) {
+  .nav-container {
+    padding: 1rem 1rem;
   }
 
-  .stats-grid {
+  .hero {
+    padding: 5rem 1rem 2rem;
+  }
+
+  .card {
+    max-width: 100%;
+    margin: 10px auto;
+  }
+
+  .card-inner {
+    border-radius: 12px;
+  }
+
+  .card-back {
+    padding: 1rem;
+  }
+
+  .vc-container {
+    padding: 0 0.5rem;
+  }
+
+  .vc-container h2 {
+    font-size: 1.4rem;
+    margin-bottom: 0.5rem;
+  }
+
+  .vc-container .role {
+    font-size: 1rem;
+  }
+
+  .vc-container p {
+    font-size: 0.85rem;
+    margin: 0.3rem 0;
+  }
+
+  .vc-container p.email,
+  .vc-container p.phone,
+  .vc-container p.website {
+    font-size: 0.75rem;
+    gap: 4px;
+  }
+
+  .hero-buttons {
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .btn {
+    width: 100%;
+    max-width: 250px;
+  }
+
+  .projects-grid {
     grid-template-columns: 1fr;
   }
 
@@ -667,12 +730,54 @@ body {
     padding: 1.2rem 0.8rem;
   }
 
-  .skill-icon {
-    font-size: 1.8rem;
-    margin-bottom: 0.5rem;
+  .section {
+    padding: 2.5rem 1rem;
+  }
+}
+
+/* Sehr kleine Displays */
+@media (max-width: 360px) {
+  .vc-container h2 {
+    font-size: 1.2rem;
   }
 
-  .skill-item h3 {
+  .vc-container .role {
     font-size: 0.9rem;
+  }
+
+  .vc-container p {
+    font-size: 0.75rem;
+  }
+
+  .vc-container p.email,
+  .vc-container p.phone,
+  .vc-container p.website {
+    font-size: 0.7rem;
+  }
+}
+
+/* Landscape Modus auf Smartphones */
+@media (max-height: 500px) and (orientation: landscape) {
+  .hero {
+    min-height: auto;
+    padding: 5rem 1rem 2rem;
+  }
+
+  .card {
+    max-width: 500px;
+  }
+
+  .card-inner {
+    padding-top: 50%;
+  }
+
+  .vc-container h2 {
+    font-size: 1.3rem;
+    margin-bottom: 0.3rem;
+  }
+
+  .vc-container p {
+    font-size: 0.8rem;
+    margin: 0.2rem 0;
   }
 }
