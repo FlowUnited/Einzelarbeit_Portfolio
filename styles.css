@@ -1,9 +1,10 @@
 /* ================================================
-   PORTFOLIO STYLESHEET - GRÜN-SCHWARZ THEME
-   RESPONSIVE OPTIMIERT
+   PORTFOLIO VON FLORIAN - STYLESHEET 
+   RESPONSIVE DESIGN
    ================================================ */
 
-/* === CSS VARIABLES === */
+/* CSS VARIABELN */
+/* Definieren von Variabeln für das Farb-Design in Grün/Schwarz */
 :root {
   /* Grün-Töne */
   --primary-green: #00ff87;
@@ -29,7 +30,7 @@
   --transition: all 0.3s ease;
 }
 
-/* === RESET & BASE === */
+/* RESET & BASE */
 * {
   margin: 0;
   padding: 0;
@@ -44,7 +45,7 @@ body {
   background-color: var(--black);
 }
 
-/* === NAVIGATION === */
+/* NAVIGATION */
 .nav {
   position: fixed;
   top: 0;
@@ -120,7 +121,7 @@ body {
   cursor: pointer;
 }
 
-/* === HERO SECTION === */
+/* HERO SECTION */
 .hero {
   min-height: 100vh;
   display: flex;
@@ -193,7 +194,7 @@ body {
   animation: fadeInUp 0.8s ease 0.4s backwards;
 }
 
-/* === CARD FLIP === */
+/* CARD FLIP - Visitenkarte Florian */
 .card {
   width: 100%;
   max-width: 800px;
@@ -205,7 +206,7 @@ body {
 .card-inner {
   position: relative;
   width: 100%;
-  padding-top: 56.25%; /* 16:9 Aspect Ratio */
+  padding-top: 56.25%; /* 16:9 Seitenverhältnis */
   transition: transform 0.8s;
   transform-style: preserve-3d;
   border-radius: 16px;
@@ -217,7 +218,7 @@ body {
   transform: rotateY(180deg);
 }
 
-/* Vorderseite & Rückseite */
+/* Vorder- und Rückseite Visitenkarte */
 .card-front,
 .card-back {
   position: absolute;
@@ -299,7 +300,7 @@ body {
   flex-wrap: wrap;
 }
 
-/* === BUTTONS === */
+/* BUTTONS */
 .btn {
   padding: clamp(0.6rem, 2vw, 0.75rem) clamp(1.5rem, 3vw, 2rem);
   border-radius: 0.5rem;
@@ -335,7 +336,7 @@ body {
   box-shadow: var(--glow);
 }
 
-/* === SECTIONS === */
+/* ABSCHNITTE */
 .section {
   padding: clamp(3rem, 8vw, 5rem) 2rem;
   max-width: 1200px;
@@ -374,7 +375,7 @@ body {
   font-size: clamp(1rem, 2vw, 1.1rem);
 }
 
-/* === ABOUT SECTION === */
+/* ÜBER MICH ABSCHNITT */
 .about-content {
   display: grid;
   grid-template-columns: 1fr;
@@ -471,7 +472,7 @@ body {
   text-shadow: 0 0 10px rgba(0, 255, 135, 0.5);
 }
 
-/* === PROJECTS SECTION === */
+/* PROJEKTE ABSCHNITT */
 .projects-grid {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
@@ -549,7 +550,7 @@ body {
   flex-wrap: wrap;
 }
 
-/* === FOOTER === */
+/* FUSSZEILE */
 .footer {
   background-color: var(--black);
   color: var(--text-secondary);
@@ -588,7 +589,7 @@ body {
   font-size: clamp(0.85rem, 1.5vw, 1rem);
 }
 
-/* === ANIMATIONS === */
+/* ANIMATIONEN */
 @keyframes fadeInUp {
   from {
     opacity: 0;
@@ -600,9 +601,9 @@ body {
   }
 }
 
-/* === RESPONSIVE BREAKPOINTS === */
+/* RESPONSIVE BREAKPOINTS */
 
-/* Tablets im Landscape */
+/* TABLET QUERFORMAT */
 @media (max-width: 1024px) {
   .skills-container {
     grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
@@ -613,7 +614,7 @@ body {
   }
 }
 
-/* Tablets im Portrait */
+/* TABLET HOCHFORMAT */
 @media (max-width: 768px) {
   .nav-menu {
     position: fixed;
@@ -659,7 +660,7 @@ body {
   }
 }
 
-/* Mobile Geräte */
+/* MOBILE GERÄTE */
 @media (max-width: 480px) {
   .nav-container {
     padding: 1rem 1rem;
@@ -735,7 +736,7 @@ body {
   }
 }
 
-/* Sehr kleine Displays */
+/* SEHR KLEINE DISPLAYS */
 @media (max-width: 360px) {
   .vc-container h2 {
     font-size: 1.2rem;
@@ -756,7 +757,7 @@ body {
   }
 }
 
-/* Landscape Modus auf Smartphones */
+/* QUERFORMAT MODUS AUF SMARTPHONES */
 @media (max-height: 500px) and (orientation: landscape) {
   .hero {
     min-height: auto;

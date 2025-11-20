@@ -1,8 +1,9 @@
-// ================================================
-// PORTFOLIO JAVASCRIPT
-// ================================================
+/* ================================================
+   PORTFOLIO FLORIAN - SCRIPTS
+   JAVASCRIPT
+   ================================================ */
 
-// === NAVIGATION TOGGLE ===
+// NAVIGATION TOGGLE
 const navToggle = document.getElementById("navToggle");
 const navMenu = document.getElementById("navMenu");
 
@@ -17,7 +18,7 @@ document.querySelectorAll(".nav-link").forEach((link) => {
   });
 });
 
-// === SMOOTH SCROLLING ===
+// SMOOTH SCROLLING
 document.querySelectorAll('a[href^="#"]').forEach((anchor) => {
   anchor.addEventListener("click", function (e) {
     e.preventDefault();
@@ -31,7 +32,7 @@ document.querySelectorAll('a[href^="#"]').forEach((anchor) => {
   });
 });
 
-// === PROJECTS DATA ===
+// PROJECTS DATA ARRAY MIT MEINEN PROJEKTEN
 const projects = [
   {
     title: "Wildradar",
@@ -72,7 +73,7 @@ const projects = [
   },
 ];
 
-// === RENDER PROJECTS ===
+// PROJEKTE RENDERN
 function renderProjects() {
   const container = document.getElementById("projectsGrid");
 
@@ -103,7 +104,7 @@ function renderProjects() {
     container.appendChild(card);
   });
 }
-// === CHART.JS VISUALIZATION ===
+// CHART.JS VISUALISIERUNG
 function createSkillsChart() {
   const ctx = document.getElementById("skillsChart");
   if (!ctx) return;
@@ -158,7 +159,7 @@ function createSkillsChart() {
   });
 }
 
-// === INTERSECTION OBSERVER für Animationen ===
+// INTERSECTION OBSERVER FÜR ANIMATIONEN
 const observer = new IntersectionObserver(
   (entries) => {
     entries.forEach((entry) => {
@@ -182,7 +183,7 @@ document
     observer.observe(el);
   });
 
-// === STATS ANIMATION beim Scrollen ===
+// STATS ANIMATION BEIM SCROLLEN
 const statsSection = document.getElementById("stats");
 const statsObserver = new IntersectionObserver(
   (entries) => {
@@ -196,7 +197,7 @@ const statsObserver = new IntersectionObserver(
   }
 );
 
-// === INIT ===
+// INITIALISIEREN
 window.addEventListener("DOMContentLoaded", () => {
   renderProjects();
   createSkillsChart();
