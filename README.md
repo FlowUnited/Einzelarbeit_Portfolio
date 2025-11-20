@@ -15,3 +15,18 @@ Die Webseite wurde mit den Browsern Google Chrome und Microsoft Edge getestet.
 
 Link für den Aufruf der Webseite:
 https://flowunited.github.io/Einzelarbeit_Portfolio/
+
+Verwendete Third-Party Libraries:
+Charts.js - ursprünglich eingebunden aber nicht verwendet (nicht optimal wegen Ladezeit)
+
+Externe Ressourcen:
+Icon-Links
+SVG-Icons ans Bilder eingebunden
+Lokale Bilder
+
+Native Browser APIs:
+Intersection Observer API
+Vanilla Java Script
+CSS Animationen
+CSS Grid und Flexbox im Layout
+Custom-Properties (CSS Variablen)
