@@ -1,4 +1,4 @@
-<!--================================================--> 
+<!--================================================-->
 <!--  PORTFOLIO VON FLORIAN - INDEX.HTML            -->
 <!--  HTML SEITENSTRUKTUR                           -->
 <!--================================================-->
@@ -28,6 +28,9 @@
 
     <!-- Chart.js für Diagramme -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.0/chart.umd.min.js"></script>
+
+    <!-- Axios für API Calls -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/1.6.2/axios.min.js"></script>
   </head>
   <body>
     <!-- NAVIGATION -->
@@ -39,6 +42,7 @@
           <li><a href="#home" class="nav-link">Home</a></li>
           <li><a href="#about" class="nav-link">Über mich</a></li>
           <li><a href="#projects" class="nav-link">Projekte</a></li>
+          <li><a href="#github" class="nav-link">GitHub</a></li>
         </ul>
       </div>
     </nav>
@@ -51,7 +55,11 @@
           <div class="card-inner">
             <!-- Vorderseite -->
             <div class="card-front">
-              <img src="Images/fb.jpg" alt="Florian Beutler" class="project-img">
+              <img
+                src="Images/fb.jpg"
+                alt="Florian Beutler"
+                class="project-img"
+              />
             </div>
             <!-- Rückseite -->
             <div class="card-back">
@@ -60,7 +68,9 @@
                 <p class="role">Student / Informatiker EFZ</p>
                 <p class="email">📧 florian.beutler@students.bfh.ch</p>
                 <p class="phone">📞 +41 79 XXX XX XX</p>
-                <p class="website">🌐 https://flowunited.github.io/Einzelarbeit_Portfolio/</p>
+                <p class="website">
+                  🌐 https://flowunited.github.io/Einzelarbeit_Portfolio/
+                </p>
               </div>
             </div>
           </div>
@@ -241,6 +251,7 @@
         </div>
       </div>
     </section>
+
     <!-- PROJECTS SECTION -->
     <section id="projects" class="section section-dark">
       <h2 class="section-title">Meine Projekte</h2>
@@ -253,16 +264,50 @@
       </div>
     </section>
 
+    <!-- GITHUB SECTION -->
+    <section id="github" class="section">
+      <h2 class="section-title">GitHub Aktivität</h2>
+      <p class="section-subtitle">
+        Meine neuesten Repositories und Entwicklungsaktivitäten
+      </p>
+
+      <!-- Featured Repositories -->
+      <div class="github-container">
+        <h3 class="github-subsection-title">Featured Repositories</h3>
+        <div class="github-repos-grid" id="githubRepos">
+          <!-- Loading Spinner -->
+          <div class="github-loading">
+            <div class="spinner"></div>
+            <p>Lade GitHub Repositories...</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Recent Activity -->
+      <div class="github-container">
+        <h3 class="github-subsection-title">Letzte Aktivitäten</h3>
+        <div class="github-activity-list" id="githubActivity">
+          <!-- Loading Spinner -->
+          <div class="github-loading">
+            <div class="spinner"></div>
+            <p>Lade GitHub Aktivitäten...</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
     <!-- FOOTER -->
     <footer class="footer">
       <div class="footer-content">
         <div class="social-links">
-          <ahref="https://github.com/FlowUnited"
+          <a
+            href="https://github.com/FlowUnited"
             class="social-link"
             target="_blank"
             >GitHub</a
           >
-          <ahref="https://www.linkedin.com/in/florian-beutler-b1886a163/"
+          <a
+            href="https://www.linkedin.com/in/florian-beutler-b1886a163/"
             class="social-link"
             target="_blank"
             >LinkedIn</a

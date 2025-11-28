@@ -3,7 +3,16 @@
    JAVASCRIPT
    ================================================ */
 
+// ================================================
+// KONFIGURATION
+// ================================================
+const GITHUB_USERNAME = "FlowUnited"; // Dein GitHub Username
+const MAX_REPOS = 6; // Anzahl der angezeigten Repositories
+const MAX_EVENTS = 10; // Anzahl der angezeigten Events
+
+// ================================================
 // NAVIGATION TOGGLE
+// ================================================
 const navToggle = document.getElementById("navToggle");
 const navMenu = document.getElementById("navMenu");
 
@@ -18,7 +27,9 @@ document.querySelectorAll(".nav-link").forEach((link) => {
   });
 });
 
+// ================================================
 // SMOOTH SCROLLING
+// ================================================
 document.querySelectorAll('a[href^="#"]').forEach((anchor) => {
   anchor.addEventListener("click", function (e) {
     e.preventDefault();
@@ -32,7 +43,9 @@ document.querySelectorAll('a[href^="#"]').forEach((anchor) => {
   });
 });
 
+// ================================================
 // PROJECTS DATA ARRAY MIT MEINEN PROJEKTEN
+// ================================================
 const projects = [
   {
     title: "Wildradar",
@@ -73,7 +86,9 @@ const projects = [
   },
 ];
 
+// ================================================
 // PROJEKTE RENDERN
+// ================================================
 function renderProjects() {
   const container = document.getElementById("projectsGrid");
 
@@ -104,7 +119,310 @@ function renderProjects() {
     container.appendChild(card);
   });
 }
+
+// ================================================
+// GITHUB API INTEGRATION
+// ================================================
+
+/**
+ * Holt die Featured Repositories von GitHub
+ * Verwendet die GitHub REST API v3
+ */
+async function fetchGitHubRepos() {
+  const reposContainer = document.getElementById("githubRepos");
+
+  try {
+    // API Call zu GitHub
+    const response = await axios.get(
+      `https://api.github.com/users/${GITHUB_USERNAME}/repos`,
+      {
+        params: {
+          sort: "updated",
+          per_page: MAX_REPOS,
+          type: "owner",
+        },
+      }
+    );
+
+    const repos = response.data;
+
+    // Leere Container und füge Repos hinzu
+    reposContainer.innerHTML = "";
+
+    if (repos.length === 0) {
+      reposContainer.innerHTML = `
+        <div class="github-empty">
+          <p>Keine öffentlichen Repositories gefunden.</p>
+        </div>
+      `;
+      return;
+    }
+
+    // Rendere jedes Repository
+    repos.forEach((repo) => {
+      const repoCard = createRepoCard(repo);
+      reposContainer.appendChild(repoCard);
+    });
+  } catch (error) {
+    console.error("Fehler beim Laden der GitHub Repositories:", error);
+    reposContainer.innerHTML = `
+      <div class="github-error">
+        <p>⚠️ Fehler beim Laden der Repositories</p>
+        <small>Bitte versuche es später erneut.</small>
+      </div>
+    `;
+  }
+}
+
+/**
+ * Erstellt eine Repository Card
+ * @param {Object} repo - Repository Objekt von GitHub API
+ * @returns {HTMLElement} - Repository Card Element
+ */
+function createRepoCard(repo) {
+  const card = document.createElement("div");
+  card.className = "github-repo-card";
+
+  // Formatiere Datum
+  const updatedDate = new Date(repo.updated_at).toLocaleDateString("de-CH", {
+    year: "numeric",
+    month: "short",
+    day: "numeric",
+  });
+
+  // Language Color Mapping (häufigste Sprachen)
+  const languageColors = {
+    JavaScript: "#f1e05a",
+    TypeScript: "#3178c6",
+    Python: "#3572A5",
+    Java: "#b07219",
+    HTML: "#e34c26",
+    CSS: "#563d7c",
+    PHP: "#4F5D95",
+    C: "#555555",
+    "C++": "#f34b7d",
+    "C#": "#178600",
+    Ruby: "#701516",
+    Go: "#00ADD8",
+    Rust: "#dea584",
+    Swift: "#ffac45",
+    Kotlin: "#A97BFF",
+  };
+
+  const languageColor = languageColors[repo.language] || "#858585";
+
+  card.innerHTML = `
+    <div class="repo-header">
+      <div class="repo-icon">📦</div>
+      <div class="repo-info">
+        <h4 class="repo-name">
+          <a href="${repo.html_url}" target="_blank">${repo.name}</a>
+        </h4>
+        ${repo.private ? '<span class="repo-badge">Private</span>' : ""}
+      </div>
+    </div>
+    <p class="repo-description">
+      ${repo.description || "Keine Beschreibung verfügbar"}
+    </p>
+    <div class="repo-stats">
+      ${
+        repo.language
+          ? `
+        <span class="repo-language">
+          <span class="language-dot" style="background-color: ${languageColor}"></span>
+          ${repo.language}
+        </span>
+      `
+          : ""
+      }
+      <span class="repo-stat">⭐ ${repo.stargazers_count}</span>
+      <span class="repo-stat">🍴 ${repo.forks_count}</span>
+    </div>
+    <div class="repo-footer">
+      <span class="repo-updated">Aktualisiert: ${updatedDate}</span>
+    </div>
+  `;
+
+  return card;
+}
+
+/**
+ * Holt die letzten GitHub Events/Aktivitäten
+ * Zeigt Commits, PRs, Issues, etc.
+ */
+async function fetchGitHubActivity() {
+  const activityContainer = document.getElementById("githubActivity");
+
+  try {
+    // API Call zu GitHub Events
+    const response = await axios.get(
+      `https://api.github.com/users/${GITHUB_USERNAME}/events/public`,
+      {
+        params: {
+          per_page: MAX_EVENTS,
+        },
+      }
+    );
+
+    const events = response.data;
+
+    // Leere Container
+    activityContainer.innerHTML = "";
+
+    if (events.length === 0) {
+      activityContainer.innerHTML = `
+        <div class="github-empty">
+          <p>Keine aktuellen Aktivitäten gefunden.</p>
+        </div>
+      `;
+      return;
+    }
+
+    // Filtere und rendere relevante Events
+    const relevantEvents = events.filter((event) =>
+      ["PushEvent", "CreateEvent", "PullRequestEvent", "IssuesEvent"].includes(
+        event.type
+      )
+    );
+
+    relevantEvents.forEach((event) => {
+      const activityItem = createActivityItem(event);
+      if (activityItem) {
+        activityContainer.appendChild(activityItem);
+      }
+    });
+
+    // Falls keine relevanten Events
+    if (relevantEvents.length === 0) {
+      activityContainer.innerHTML = `
+        <div class="github-empty">
+          <p>Keine relevanten Aktivitäten in letzter Zeit.</p>
+        </div>
+      `;
+    }
+  } catch (error) {
+    console.error("Fehler beim Laden der GitHub Aktivitäten:", error);
+    activityContainer.innerHTML = `
+      <div class="github-error">
+        <p>⚠️ Fehler beim Laden der Aktivitäten</p>
+        <small>Bitte versuche es später erneut.</small>
+      </div>
+    `;
+  }
+}
+
+/**
+ * Erstellt ein Activity Item basierend auf Event Type
+ * @param {Object} event - GitHub Event Objekt
+ * @returns {HTMLElement|null} - Activity Item Element
+ */
+function createActivityItem(event) {
+  const item = document.createElement("div");
+  item.className = "github-activity-item";
+
+  // Formatiere Datum
+  const eventDate = getTimeAgo(new Date(event.created_at));
+  const repoName = event.repo.name;
+
+  let icon = "📝";
+  let action = "";
+  let details = "";
+
+  // Event Type Handling
+  switch (event.type) {
+    case "PushEvent":
+      icon = "🔨";
+      const commitCount = event.payload.commits.length;
+      action = `pushed ${commitCount} commit${commitCount > 1 ? "s" : ""} to`;
+      const commitMsg =
+        event.payload.commits[0]?.message.substring(0, 60) || "";
+      details = commitMsg ? `<small>"${commitMsg}..."</small>` : "";
+      break;
+
+    case "CreateEvent":
+      if (event.payload.ref_type === "repository") {
+        icon = "📦";
+        action = "created repository";
+      } else if (event.payload.ref_type === "branch") {
+        icon = "🌿";
+        action = `created branch ${event.payload.ref} in`;
+      } else {
+        icon = "✨";
+        action = "created";
+      }
+      break;
+
+    case "PullRequestEvent":
+      icon = "🔀";
+      action = `${event.payload.action} pull request in`;
+      details = event.payload.pull_request
+        ? `<small>"${event.payload.pull_request.title.substring(
+            0,
+            60
+          )}..."</small>`
+        : "";
+      break;
+
+    case "IssuesEvent":
+      icon = "🐛";
+      action = `${event.payload.action} issue in`;
+      details = event.payload.issue
+        ? `<small>"${event.payload.issue.title.substring(0, 60)}..."</small>`
+        : "";
+      break;
+
+    default:
+      return null;
+  }
+
+  item.innerHTML = `
+    <div class="activity-icon">${icon}</div>
+    <div class="activity-content">
+      <p class="activity-text">
+        <strong>${GITHUB_USERNAME}</strong> ${action}
+        <a href="https://github.com/${repoName}" target="_blank">${repoName}</a>
+      </p>
+      ${details ? `<p class="activity-details">${details}</p>` : ""}
+      <span class="activity-time">${eventDate}</span>
+    </div>
+  `;
+
+  return item;
+}
+
+/**
+ * Berechnet "Zeit vor" Text (z.B. "vor 2 Tagen")
+ * @param {Date} date - Datum des Events
+ * @returns {string} - Formatierter Zeit-Text
+ */
+function getTimeAgo(date) {
+  const now = new Date();
+  const diffMs = now - date;
+  const diffMins = Math.floor(diffMs / 60000);
+  const diffHours = Math.floor(diffMs / 3600000);
+  const diffDays = Math.floor(diffMs / 86400000);
+
+  if (diffMins < 60) {
+    return diffMins <= 1 ? "vor 1 Minute" : `vor ${diffMins} Minuten`;
+  } else if (diffHours < 24) {
+    return diffHours === 1 ? "vor 1 Stunde" : `vor ${diffHours} Stunden`;
+  } else if (diffDays < 7) {
+    return diffDays === 1 ? "vor 1 Tag" : `vor ${diffDays} Tagen`;
+  } else if (diffDays < 30) {
+    const weeks = Math.floor(diffDays / 7);
+    return weeks === 1 ? "vor 1 Woche" : `vor ${weeks} Wochen`;
+  } else {
+    return date.toLocaleDateString("de-CH", {
+      year: "numeric",
+      month: "short",
+      day: "numeric",
+    });
+  }
+}
+
+// ================================================
 // CHART.JS VISUALISIERUNG
+// ================================================
 function createSkillsChart() {
   const ctx = document.getElementById("skillsChart");
   if (!ctx) return;
@@ -159,7 +477,9 @@ function createSkillsChart() {
   });
 }
 
+// ================================================
 // INTERSECTION OBSERVER FÜR ANIMATIONEN
+// ================================================
 const observer = new IntersectionObserver(
   (entries) => {
     entries.forEach((entry) => {
@@ -174,8 +494,11 @@ const observer = new IntersectionObserver(
   }
 );
 
+// Beobachte Elemente für Animation
 document
-  .querySelectorAll(".project-card, .stat-card, .skill-item")
+  .querySelectorAll(
+    ".project-card, .stat-card, .skill-item, .github-repo-card, .github-activity-item"
+  )
   .forEach((el) => {
     el.style.opacity = "0";
     el.style.transform = "translateY(20px)";
@@ -183,23 +506,17 @@ document
     observer.observe(el);
   });
 
-// STATS ANIMATION BEIM SCROLLEN
-const statsSection = document.getElementById("stats");
-const statsObserver = new IntersectionObserver(
-  (entries) => {
-    if (entries[0].isIntersecting) {
-      animateStats();
-      statsObserver.unobserve(statsSection);
-    }
-  },
-  {
-    threshold: 0.3,
-  }
-);
-
-// INITIALISIEREN
+// ================================================
+// INITIALISIERUNG
+// ================================================
 window.addEventListener("DOMContentLoaded", () => {
+  // Rendere Projekte
   renderProjects();
+
+  // Lade GitHub Daten
+  fetchGitHubRepos();
+  fetchGitHubActivity();
+
+  // Erstelle Chart (falls Canvas vorhanden)
   createSkillsChart();
-  statsObserver.observe(statsSection);
 });
