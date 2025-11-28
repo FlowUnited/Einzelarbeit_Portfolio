@@ -269,7 +269,8 @@ async function fetchGitHubActivity() {
     // Leere Container
     activityContainer.innerHTML = "";
 
-    if (events.length === 0) {
+    // Prüfe ob Events ein Array ist
+    if (!Array.isArray(events) || events.length === 0) {
       activityContainer.innerHTML = `
         <div class="github-empty">
           <p>Keine aktuellen Aktivitäten gefunden.</p>
@@ -280,32 +281,55 @@ async function fetchGitHubActivity() {
 
     // Filtere und rendere relevante Events
     const relevantEvents = events.filter((event) =>
-      ["PushEvent", "CreateEvent", "PullRequestEvent", "IssuesEvent"].includes(
-        event.type
-      )
+      [
+        "PushEvent",
+        "CreateEvent",
+        "PullRequestEvent",
+        "IssuesEvent",
+        "WatchEvent",
+        "ForkEvent",
+      ].includes(event.type)
     );
 
+    // Erstelle Activity Items
+    let addedCount = 0;
     relevantEvents.forEach((event) => {
-      const activityItem = createActivityItem(event);
-      if (activityItem) {
-        activityContainer.appendChild(activityItem);
+      try {
+        const activityItem = createActivityItem(event);
+        if (activityItem) {
+          activityContainer.appendChild(activityItem);
+          addedCount++;
+        }
+      } catch (err) {
+        console.warn("Fehler beim Erstellen eines Activity Items:", err);
       }
     });
 
-    // Falls keine relevanten Events
-    if (relevantEvents.length === 0) {
+    // Falls keine relevanten Events hinzugefügt wurden
+    if (addedCount === 0) {
       activityContainer.innerHTML = `
         <div class="github-empty">
           <p>Keine relevanten Aktivitäten in letzter Zeit.</p>
+          <small>Push Events, Repository Creation, Pull Requests, etc. werden hier angezeigt.</small>
         </div>
       `;
     }
   } catch (error) {
     console.error("Fehler beim Laden der GitHub Aktivitäten:", error);
+
+    // Detailliertere Fehlermeldung
+    let errorMessage = "Bitte versuche es später erneut.";
+    if (error.response && error.response.status === 404) {
+      errorMessage = "GitHub User nicht gefunden. Prüfe den Username.";
+    } else if (error.response && error.response.status === 403) {
+      errorMessage =
+        "GitHub API Rate Limit erreicht. Versuche es in einer Stunde erneut.";
+    }
+
     activityContainer.innerHTML = `
       <div class="github-error">
         <p>⚠️ Fehler beim Laden der Aktivitäten</p>
-        <small>Bitte versuche es später erneut.</small>
+        <small>${errorMessage}</small>
       </div>
     `;
   }
@@ -328,24 +352,27 @@ function createActivityItem(event) {
   let action = "";
   let details = "";
 
-  // Event Type Handling
+  // Event Type Handling mit sicherer Abfrage
   switch (event.type) {
     case "PushEvent":
       icon = "🔨";
-      const commitCount = event.payload.commits.length;
+      const commits = event.payload?.commits || [];
+      const commitCount = commits.length;
       action = `pushed ${commitCount} commit${commitCount > 1 ? "s" : ""} to`;
-      const commitMsg =
-        event.payload.commits[0]?.message.substring(0, 60) || "";
+      const commitMsg = commits[0]?.message?.substring(0, 60) || "";
       details = commitMsg ? `<small>"${commitMsg}..."</small>` : "";
       break;
 
     case "CreateEvent":
-      if (event.payload.ref_type === "repository") {
+      if (event.payload?.ref_type === "repository") {
         icon = "📦";
         action = "created repository";
-      } else if (event.payload.ref_type === "branch") {
+      } else if (event.payload?.ref_type === "branch") {
         icon = "🌿";
         action = `created branch ${event.payload.ref} in`;
+      } else if (event.payload?.ref_type === "tag") {
+        icon = "🏷️";
+        action = `created tag ${event.payload.ref} in`;
       } else {
         icon = "✨";
         action = "created";
@@ -354,8 +381,8 @@ function createActivityItem(event) {
 
     case "PullRequestEvent":
       icon = "🔀";
-      action = `${event.payload.action} pull request in`;
-      details = event.payload.pull_request
+      action = `${event.payload?.action || "updated"} pull request in`;
+      details = event.payload?.pull_request?.title
         ? `<small>"${event.payload.pull_request.title.substring(
             0,
             60
@@ -365,10 +392,20 @@ function createActivityItem(event) {
 
     case "IssuesEvent":
       icon = "🐛";
-      action = `${event.payload.action} issue in`;
-      details = event.payload.issue
+      action = `${event.payload?.action || "updated"} issue in`;
+      details = event.payload?.issue?.title
         ? `<small>"${event.payload.issue.title.substring(0, 60)}..."</small>`
         : "";
+      break;
+
+    case "WatchEvent":
+      icon = "⭐";
+      action = "starred";
+      break;
+
+    case "ForkEvent":
+      icon = "🍴";
+      action = "forked";
       break;
 
     default:
