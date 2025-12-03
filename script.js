@@ -10,6 +10,9 @@ const GITHUB_USERNAME = "FlowUnited"; // Dein GitHub Username
 const MAX_REPOS = 6; // Anzahl der angezeigten Repositories
 const MAX_EVENTS = 10; // Anzahl der angezeigten Events
 
+// Stelle sicher dass HTTPS verwendet wird
+const GITHUB_API_BASE = "https://api.github.com";
+
 // ================================================
 // NAVIGATION TOGGLE
 // ================================================
@@ -132,9 +135,9 @@ async function fetchGitHubRepos() {
   const reposContainer = document.getElementById("githubRepos");
 
   try {
-    // API Call zu GitHub mit Headers
+    // API Call zu GitHub mit Headers - VERWENDE HTTPS!
     const response = await axios.get(
-      `https://api.github.com/users/${GITHUB_USERNAME}/repos`,
+      `${GITHUB_API_BASE}/users/${GITHUB_USERNAME}/repos`,
       {
         params: {
           sort: "updated",
@@ -297,9 +300,9 @@ async function fetchGitHubActivity() {
   const activityContainer = document.getElementById("githubActivity");
 
   try {
-    // API Call zu GitHub Events mit Headers
+    // API Call zu GitHub Events mit Headers - VERWENDE HTTPS!
     const response = await axios.get(
-      `https://api.github.com/users/${GITHUB_USERNAME}/events/public`,
+      `${GITHUB_API_BASE}/users/${GITHUB_USERNAME}/events/public`,
       {
         params: {
           per_page: MAX_EVENTS,
