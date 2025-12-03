@@ -345,9 +345,16 @@ async function fetchGitHubActivity() {
       ].includes(event.type)
     );
 
+    // Debug: Zeige alle Event-Typen in der Konsole
+    console.log("Gefundene Event-Typen:", [
+      ...new Set(events.map((e) => e.type)),
+    ]);
+    console.log("Anzahl Events insgesamt:", events.length);
+    console.log("Anzahl relevanter Events:", relevantEvents.length);
+
     // Erstelle Activity Items
     let addedCount = 0;
-    relevantEvents.forEach((event) => {
+    relevantEvents.slice(0, MAX_EVENTS).forEach((event) => {
       try {
         const activityItem = createActivityItem(event);
         if (activityItem) {
@@ -355,7 +362,7 @@ async function fetchGitHubActivity() {
           addedCount++;
         }
       } catch (err) {
-        console.warn("Fehler beim Erstellen eines Activity Items:", err);
+        console.warn("Fehler beim Erstellen eines Activity Items:", err, event);
       }
     });
 
@@ -363,8 +370,11 @@ async function fetchGitHubActivity() {
     if (addedCount === 0) {
       activityContainer.innerHTML = `
         <div class="github-empty">
-          <p>Keine relevanten Aktivitäten in letzter Zeit.</p>
-          <small>Push Events, Repository Creation, Pull Requests, etc. werden hier angezeigt.</small>
+          <p>Keine relevanten Aktivitäten in den letzten 90 Tagen gefunden.</p>
+          <small>Die GitHub API zeigt nur Events der letzten ~90 Tage an. Sobald du pushst, PRs erstellst oder Repos erstellst, erscheinen diese hier.</small>
+          <a href="https://github.com/${GITHUB_USERNAME}" target="_blank" class="btn btn-secondary" style="margin-top: 1rem;">
+            Siehe vollständiges GitHub-Profil
+          </a>
         </div>
       `;
     }
