@@ -132,7 +132,7 @@ async function fetchGitHubRepos() {
   const reposContainer = document.getElementById("githubRepos");
 
   try {
-    // API Call zu GitHub
+    // API Call zu GitHub mit Headers
     const response = await axios.get(
       `https://api.github.com/users/${GITHUB_USERNAME}/repos`,
       {
@@ -141,15 +141,29 @@ async function fetchGitHubRepos() {
           per_page: MAX_REPOS,
           type: "owner",
         },
+        headers: {
+          Accept: "application/vnd.github+json",
+          "X-GitHub-Api-Version": "2022-11-28",
+        },
       }
     );
 
     const repos = response.data;
 
+    // Zeige Rate Limit Info in Konsole
+    console.log(
+      "GitHub API - Remaining Requests:",
+      response.headers["x-ratelimit-remaining"]
+    );
+    console.log(
+      "GitHub API - Rate Limit Reset:",
+      new Date(response.headers["x-ratelimit-reset"] * 1000)
+    );
+
     // Leere Container und füge Repos hinzu
     reposContainer.innerHTML = "";
 
-    if (repos.length === 0) {
+    if (!Array.isArray(repos) || repos.length === 0) {
       reposContainer.innerHTML = `
         <div class="github-empty">
           <p>Keine öffentlichen Repositories gefunden.</p>
@@ -165,10 +179,36 @@ async function fetchGitHubRepos() {
     });
   } catch (error) {
     console.error("Fehler beim Laden der GitHub Repositories:", error);
+
+    // Detaillierte Fehlerbehandlung
+    let errorMessage = "Bitte versuche es später erneut.";
+
+    if (error.response) {
+      const status = error.response.status;
+      const remaining = error.response.headers["x-ratelimit-remaining"];
+
+      if (status === 404) {
+        errorMessage = `GitHub User "${GITHUB_USERNAME}" nicht gefunden. Prüfe den Username in script.js.`;
+      } else if (status === 403 && remaining === "0") {
+        const resetTime = new Date(
+          error.response.headers["x-ratelimit-reset"] * 1000
+        );
+        errorMessage = `GitHub API Rate Limit erreicht. Versuche es nach ${resetTime.toLocaleTimeString(
+          "de-CH"
+        )} Uhr erneut.`;
+      } else if (status === 403) {
+        errorMessage =
+          "GitHub API Zugriff eingeschränkt. Möglicherweise Rate Limit erreicht.";
+      }
+    } else if (error.request) {
+      errorMessage =
+        "Keine Verbindung zur GitHub API möglich. Prüfe deine Internetverbindung.";
+    }
+
     reposContainer.innerHTML = `
       <div class="github-error">
         <p>⚠️ Fehler beim Laden der Repositories</p>
-        <small>Bitte versuche es später erneut.</small>
+        <small>${errorMessage}</small>
       </div>
     `;
   }
@@ -207,6 +247,7 @@ function createRepoCard(repo) {
     Rust: "#dea584",
     Swift: "#ffac45",
     Kotlin: "#A97BFF",
+    ABAP: "#E8274B",
   };
 
   const languageColor = languageColors[repo.language] || "#858585";
@@ -216,7 +257,9 @@ function createRepoCard(repo) {
       <div class="repo-icon">📦</div>
       <div class="repo-info">
         <h4 class="repo-name">
-          <a href="${repo.html_url}" target="_blank">${repo.name}</a>
+          <a href="${
+            repo.html_url
+          }" target="_blank" rel="noopener noreferrer">${repo.name}</a>
         </h4>
         ${repo.private ? '<span class="repo-badge">Private</span>' : ""}
       </div>
@@ -254,17 +297,27 @@ async function fetchGitHubActivity() {
   const activityContainer = document.getElementById("githubActivity");
 
   try {
-    // API Call zu GitHub Events
+    // API Call zu GitHub Events mit Headers
     const response = await axios.get(
       `https://api.github.com/users/${GITHUB_USERNAME}/events/public`,
       {
         params: {
           per_page: MAX_EVENTS,
         },
+        headers: {
+          Accept: "application/vnd.github+json",
+          "X-GitHub-Api-Version": "2022-11-28",
+        },
       }
     );
 
     const events = response.data;
+
+    // Zeige Rate Limit Info in Konsole
+    console.log(
+      "GitHub Events API - Remaining Requests:",
+      response.headers["x-ratelimit-remaining"]
+    );
 
     // Leere Container
     activityContainer.innerHTML = "";
@@ -274,6 +327,7 @@ async function fetchGitHubActivity() {
       activityContainer.innerHTML = `
         <div class="github-empty">
           <p>Keine aktuellen Aktivitäten gefunden.</p>
+          <small>Sobald du auf GitHub aktiv wirst (Push, PR, etc.), erscheinen hier deine Aktivitäten.</small>
         </div>
       `;
       return;
@@ -317,13 +371,36 @@ async function fetchGitHubActivity() {
   } catch (error) {
     console.error("Fehler beim Laden der GitHub Aktivitäten:", error);
 
-    // Detailliertere Fehlermeldung
+    // Detaillierte Fehlerbehandlung
     let errorMessage = "Bitte versuche es später erneut.";
-    if (error.response && error.response.status === 404) {
-      errorMessage = "GitHub User nicht gefunden. Prüfe den Username.";
-    } else if (error.response && error.response.status === 403) {
+
+    if (error.response) {
+      const status = error.response.status;
+      const remaining = error.response.headers?.["x-ratelimit-remaining"];
+
+      if (status === 404) {
+        errorMessage = `GitHub User "${GITHUB_USERNAME}" nicht gefunden oder keine öffentlichen Events verfügbar.`;
+      } else if (status === 403 && remaining === "0") {
+        const resetTime = error.response.headers["x-ratelimit-reset"]
+          ? new Date(
+              error.response.headers["x-ratelimit-reset"] * 1000
+            ).toLocaleTimeString("de-CH")
+          : "in einer Stunde";
+        errorMessage = `GitHub API Rate Limit erreicht (max. 60 Requests/Stunde ohne Auth). Versuche es nach ${resetTime} Uhr erneut.`;
+      } else if (status === 403) {
+        errorMessage =
+          "GitHub API Zugriff eingeschränkt. Rate Limit erreicht oder Secondary Rate Limit aktiv.";
+      }
+
+      console.log("Error Response:", error.response.data);
+      console.log("Rate Limit Status:", {
+        remaining: remaining,
+        limit: error.response.headers?.["x-ratelimit-limit"],
+        reset: error.response.headers?.["x-ratelimit-reset"],
+      });
+    } else if (error.request) {
       errorMessage =
-        "GitHub API Rate Limit erreicht. Versuche es in einer Stunde erneut.";
+        "Keine Verbindung zur GitHub API möglich. Prüfe deine Internetverbindung.";
     }
 
     activityContainer.innerHTML = `
@@ -346,70 +423,75 @@ function createActivityItem(event) {
 
   // Formatiere Datum
   const eventDate = getTimeAgo(new Date(event.created_at));
-  const repoName = event.repo.name;
+  const repoName = event.repo?.name || "Unknown Repository";
 
   let icon = "📝";
   let action = "";
   let details = "";
 
   // Event Type Handling mit sicherer Abfrage
-  switch (event.type) {
-    case "PushEvent":
-      icon = "🔨";
-      const commits = event.payload?.commits || [];
-      const commitCount = commits.length;
-      action = `pushed ${commitCount} commit${commitCount > 1 ? "s" : ""} to`;
-      const commitMsg = commits[0]?.message?.substring(0, 60) || "";
-      details = commitMsg ? `<small>"${commitMsg}..."</small>` : "";
-      break;
+  try {
+    switch (event.type) {
+      case "PushEvent":
+        icon = "🔨";
+        const commits = event.payload?.commits || [];
+        const commitCount = commits.length;
+        action = `pushed ${commitCount} commit${commitCount > 1 ? "s" : ""} to`;
+        const commitMsg = commits[0]?.message?.substring(0, 60) || "";
+        details = commitMsg ? `<small>"${commitMsg}..."</small>` : "";
+        break;
 
-    case "CreateEvent":
-      if (event.payload?.ref_type === "repository") {
-        icon = "📦";
-        action = "created repository";
-      } else if (event.payload?.ref_type === "branch") {
-        icon = "🌿";
-        action = `created branch ${event.payload.ref} in`;
-      } else if (event.payload?.ref_type === "tag") {
-        icon = "🏷️";
-        action = `created tag ${event.payload.ref} in`;
-      } else {
-        icon = "✨";
-        action = "created";
-      }
-      break;
+      case "CreateEvent":
+        if (event.payload?.ref_type === "repository") {
+          icon = "📦";
+          action = "created repository";
+        } else if (event.payload?.ref_type === "branch") {
+          icon = "🌿";
+          action = `created branch ${event.payload.ref} in`;
+        } else if (event.payload?.ref_type === "tag") {
+          icon = "🏷️";
+          action = `created tag ${event.payload.ref} in`;
+        } else {
+          icon = "✨";
+          action = "created";
+        }
+        break;
 
-    case "PullRequestEvent":
-      icon = "🔀";
-      action = `${event.payload?.action || "updated"} pull request in`;
-      details = event.payload?.pull_request?.title
-        ? `<small>"${event.payload.pull_request.title.substring(
-            0,
-            60
-          )}..."</small>`
-        : "";
-      break;
+      case "PullRequestEvent":
+        icon = "🔀";
+        action = `${event.payload?.action || "updated"} pull request in`;
+        details = event.payload?.pull_request?.title
+          ? `<small>"${event.payload.pull_request.title.substring(
+              0,
+              60
+            )}..."</small>`
+          : "";
+        break;
 
-    case "IssuesEvent":
-      icon = "🐛";
-      action = `${event.payload?.action || "updated"} issue in`;
-      details = event.payload?.issue?.title
-        ? `<small>"${event.payload.issue.title.substring(0, 60)}..."</small>`
-        : "";
-      break;
+      case "IssuesEvent":
+        icon = "🐛";
+        action = `${event.payload?.action || "updated"} issue in`;
+        details = event.payload?.issue?.title
+          ? `<small>"${event.payload.issue.title.substring(0, 60)}..."</small>`
+          : "";
+        break;
 
-    case "WatchEvent":
-      icon = "⭐";
-      action = "starred";
-      break;
+      case "WatchEvent":
+        icon = "⭐";
+        action = "starred";
+        break;
 
-    case "ForkEvent":
-      icon = "🍴";
-      action = "forked";
-      break;
+      case "ForkEvent":
+        icon = "🍴";
+        action = "forked";
+        break;
 
-    default:
-      return null;
+      default:
+        return null;
+    }
+  } catch (err) {
+    console.warn("Fehler beim Verarbeiten eines Events:", err, event);
+    return null;
   }
 
   item.innerHTML = `
@@ -417,7 +499,7 @@ function createActivityItem(event) {
     <div class="activity-content">
       <p class="activity-text">
         <strong>${GITHUB_USERNAME}</strong> ${action}
-        <a href="https://github.com/${repoName}" target="_blank">${repoName}</a>
+        <a href="https://github.com/${repoName}" target="_blank" rel="noopener noreferrer">${repoName}</a>
       </p>
       ${details ? `<p class="activity-details">${details}</p>` : ""}
       <span class="activity-time">${eventDate}</span>
